@@ -3,9 +3,10 @@ import { Alert, Button, Keyboard, StyleSheet, Text, TouchableWithoutFeedback, Vi
 
 import Card from '../component/Card';
 import Input from '../component/Input';
+import NumberContainer from '../component/NumberContainer';
 import Colors from '../constants/colors';
 
-const StartGameScreen = () => {
+const StartGameScreen = ({ onStartGame }) => {
   const [enteredValue, setEnteredValue] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [selectNumber, setSelectNumber] = useState('');
@@ -28,14 +29,21 @@ const StartGameScreen = () => {
     setConfirmed(true);
     setSelectNumber(chosenNumber);
     setEnteredValue('');
+    Keyboard.dismiss();
   };
 
   let confirmedOutput;
   if (confirmed) {
-    confirmedOutput = <Text>Chosen Number:{selectNumber} </Text>;
+    confirmedOutput = (
+      <Card style={summaryContainer}>
+        <Text>You Selected</Text>
+        <NumberContainer>{selectNumber}</NumberContainer>
+        <Button title='START GAME' onPress={() => onStartGame(selectNumber)} />
+      </Card>
+    );
   }
 
-  const { gameScreenRoot, input, buttonContainer, inputContainer, title, button } = styles;
+  const { gameScreenRoot, input, buttonContainer, inputContainer, title, button, summaryContainer } = styles;
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={gameScreenRoot}>
@@ -97,5 +105,9 @@ const styles = StyleSheet.create({
   input: {
     width: 50,
     textAlign: 'center',
+  },
+  summaryContainer: {
+    marginTop: 50,
+    alignItems: 'center',
   },
 });
